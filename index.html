@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZODIAC</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #000;
+  --fg: #fff;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  font-family: Inter, sans-serif;
+  overflow: hidden;
+}
+
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.7);
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: -1;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: opacity .8s ease;
+}
+
+.click-text {
+  font-size: 16px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  padding: 16px 32px;
+  border: 1px solid rgba(255,255,255,0.4);
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+.click-text:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+#main-content {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center img {
+  width: min(320px, 70vw);
+  height: auto;
+  display: block;
+  filter: grayscale(1);
+}
+.center h1 {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: white;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+body.entered::after {
+  background: rgba(0,0,0,0.35);
+}
+</style>
+</head>
+
+<body>
+<video id="bg-video" autoplay muted loop playsinline>
+  <source src="https://cdn.jsdelivr.net/gh/Darkdragonzxs/Proxy-UV@main/bga.mp4" type="video/mp4">
+</video>
+<div class="overlay" id="overlay">
+  <div class="click-text" onclick="enter()">enter</div>
+</div>
+
+<div id="main-content">
+  <div class="center">
+    <img src="https://s12.gifyu.com/images/bkQRV.gif" alt="ZODIAC">
+    <h1>ZDIAQ</h1>
+  </div>
+</div>
+
+<audio id="bg-music" src="https://cdn.jsdelivr.net/gh/Darkdragonzxs/darkdragonzxs.github.io@main/zodiac.mp3"></audio>
+
+<script>
+function enter() {
+  const overlay = document.getElementById("overlay");
+  const audio = document.getElementById("bg-music");
+
+  audio.volume = 0.6;
+  audio.loop = true;
+  audio.play().catch(() => {});
+
+  document.body.classList.add("entered");
+
+  overlay.style.opacity = "0";
+  setTimeout(() => {
+    overlay.remove();
+    document.getElementById("main-content").style.display = "block";
+  }, 800);
+}
+</script>
+
+</body>
+</html>
