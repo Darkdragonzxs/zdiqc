@@ -5,7 +5,6 @@ const volumeIcon = document.getElementById("volumeIcon");
 const sidePanel = document.getElementById("sidePanel");
 
 let lastVolume = 0.5;
-
 function startSequence() {
   const overlay = document.getElementById("overlay");
   const main = document.getElementById("main-content");
@@ -20,32 +19,27 @@ function startSequence() {
   video.play().catch(()=>{});
   audio.play().catch(()=>{});
 
-  requestAnimationFrame(() => {
-    video.style.opacity = "1";
-  });
+  requestAnimationFrame(() => video.style.opacity = "1");
 
   overlay.style.opacity = "0";
-
   setTimeout(() => overlay.remove(), 800);
+
   setTimeout(() => {
     main.style.display = "block";
     sidePanel.style.display = "flex";
-  }, 1500);
+  }, 1200);
 }
-
-volumeSlider.addEventListener("input", e => {
-  const v = e.target.value / 100;
-  audio.volume = v;
-  lastVolume = v;
-  audio.muted = v === 0;
+volumeSlider.oninput = e => {
+  lastVolume = e.target.value / 100;
+  audio.volume = lastVolume;
+  audio.muted = lastVolume === 0;
   updateIcon();
-});
-
-volumeIcon.addEventListener("click", () => {
+};
+volumeIcon.onclick = () => {
   audio.muted = !audio.muted;
-  if (!audio.muted) audio.volume = lastVolume || 0.5;
+  audio.volume = audio.muted ? 0 : lastVolume || 0.5;
   updateIcon();
-});
+};
 
 function updateIcon() {
   volumeIcon.className =
@@ -53,28 +47,20 @@ function updateIcon() {
       ? "fa-solid fa-volume-xmark"
       : "fa-solid fa-volume-high";
 }
-
 function loadDocs() {
-  loadScript("/docs.js");
-}
+  if (window.openDocs) return openDocs();
 
-function loadServices() {
-  loadScript("/serv.js");
-}
-
-function loadScript(src) {
-  if (document.querySelector(`script[src="${src}"]`)) return;
   const s = document.createElement("script");
-  s.src = src;
+  s.src = "/docs.js";
+  s.onload = () => openDocs();
   document.body.appendChild(s);
 }
 
-function keepVideoPlaying(video) {
-  function step() {
-    if (!video.paused) {
-      video.currentTime += 0.016;
-    }
-    requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+function loadServices() {
+  if (window.openServices) return openServices();
+
+  const s = document.createElement("script");
+  s.src = "/serv.js";
+  s.onload = () => openServices();
+  document.body.appendChild(s);
 }
