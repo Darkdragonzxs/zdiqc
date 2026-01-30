@@ -22,7 +22,7 @@ function startSequence() {
   requestAnimationFrame(() => video.style.opacity = "1");
 
   overlay.style.opacity = "0";
-  setTimeout(() => overlay.remove(), 1000);
+  setTimeout(() => overlay.remove(), 1500);
 
   setTimeout(() => {
     main.style.display = "block";
