@@ -9,6 +9,7 @@ let lastVolume=0.5;
 volumeSlider.oninput=e=>{lastVolume=e.target.value/100;audio.volume=lastVolume;audio.muted=lastVolume===0;updateIcon()};
 volumeIcon.onclick=()=>{audio.muted=!audio.muted;audio.volume=audio.muted?0:lastVolume||0.5;updateIcon()};
 function updateIcon(){volumeIcon.className=(audio.muted||audio.volume===0)?"fa-solid fa-volume-xmark":"fa-solid fa-volume-high"}
+
 (function(){
   const css=`
 .fade{opacity:0;transform:translateY(10px);transition:opacity 1s ease,transform 1s ease}
@@ -27,10 +28,11 @@ function updateIcon(){volumeIcon.className=(audio.muted||audio.volume===0)?"fa-s
   main.classList.add("fade");
   sidePanel.classList.add("fade");
 })();
+
 (function(){
   const c=main.querySelector(".center");
   if(!c)return;
-  if(c.querySelector(".buttons"))return;
+  if(c.querySelector(".buttons")) return;
   const b=document.createElement("div");
   b.className="buttons fade";
   const d=document.createElement("button");
@@ -43,6 +45,7 @@ function updateIcon(){volumeIcon.className=(audio.muted||audio.volume===0)?"fa-s
   b.appendChild(s);
   c.appendChild(b);
 })();
+
 let uiReady=false;
 function startSequence(){
   const overlay=document.getElementById("overlay");
@@ -68,5 +71,21 @@ function startSequence(){
   },2000);
   setTimeout(()=>uiReady=true,2000);
 }
-function loadDocs(){if(!uiReady)return;if(window.openDocs)return openDocs();const s=document.createElement("script");s.src="/docs.js";s.onload=()=>openDocs();document.body.appendChild(s)}
-function loadServices(){if(!uiReady)return;if(window.openServices)return openServices();const s=document.createElement("script");s.src="/serv.js";s.onload=()=>openServices();document.body.appendChild(s)}
+
+function loadDocs(){
+  if(!uiReady) return;
+  if(window.openDocs) return openDocs();
+  const s=document.createElement("script");
+  s.src="/docs.js";
+  s.onload=()=>openDocs();
+  document.body.appendChild(s);
+}
+
+function loadServices(){
+  if(!uiReady) return;
+  if(window.openServices) return openServices();
+  const s=document.createElement("script");
+  s.src="/serv.js";
+  s.onload=()=>openServices();
+  document.body.appendChild(s);
+}
