@@ -5,58 +5,18 @@ const volumeSlider = document.getElementById("volumeSlider");
 const volumeIcon = document.getElementById("volumeIcon");
 const sidePanel = document.getElementById("sidePanel");
 const main = document.getElementById("main-content");
-
 let lastVolume = 0.5;
-let uiReady = false;
-
-function startSequence() {
-  const overlay = document.getElementById("overlay");
-
-  video.style.display = "block";
-  video.currentTime = 0;
-  audio.currentTime = 0;
-
-  audio.volume = lastVolume;
-  audio.loop = true;
-
-  video.play().catch(()=>{});
-  audio.play().catch(()=>{});
-
-  requestAnimationFrame(() => {
-    video.style.opacity = "1";
-  });
-
-  overlay.style.opacity = "0";
-  setTimeout(() => overlay.remove(), 1500);
-
-  setTimeout(() => {
-    main.style.display = "block";
-    sidePanel.style.display = "flex";
-
-    requestAnimationFrame(() => {
-      main.classList.add("show");
-      sidePanel.classList.add("show");
-    });
-  }, 1200);
-
-  setTimeout(() => {
-    uiReady = true;
-  }, 2000);
-}
-
 volumeSlider.oninput = e => {
   lastVolume = e.target.value / 100;
   audio.volume = lastVolume;
   audio.muted = lastVolume === 0;
   updateIcon();
 };
-
 volumeIcon.onclick = () => {
   audio.muted = !audio.muted;
   audio.volume = audio.muted ? 0 : lastVolume || 0.5;
   updateIcon();
 };
-
 function updateIcon() {
   volumeIcon.className =
     (audio.muted || audio.volume === 0)
@@ -64,22 +24,61 @@ function updateIcon() {
       : "fa-solid fa-volume-high";
 }
 
+//I'm lazy, ok??? Anything wrong with ts ?? 😭
+(function injectFadeCSS() {
+  const css = `
+    .fade { opacity:0; transform: translateY(10px); transition: opacity 1s ease, transform 1s ease; }
+    .fade.show { opacity:1; transform: translateY(0); }
+    #main-content, #sidePanel { display:none; }
+    #bg-video { opacity:0; transition: opacity 1.2s ease; }
+  `;
+  const style = document.createElement("style");
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  main.classList.add("fade");
+  sidePanel.classList.add("fade");
+})();
+
+let uiReady = false;
+function startSequence() {
+  const overlay = document.getElementById("overlay");
+
+  video.style.display = "block";
+  video.currentTime = 0;
+  audio.currentTime = 0;
+  audio.volume = lastVolume;
+  audio.loop = true;
+  video.play().catch(()=>{});
+  audio.play().catch(()=>{});
+
+  requestAnimationFrame(() => video.style.opacity = "1");
+  overlay.style.opacity = "0";
+  setTimeout(() => overlay.remove(), 1500);
+
+  setTimeout(() => {
+    main.style.display = "block";
+    sidePanel.style.display = "flex";
+    requestAnimationFrame(() => {
+      main.classList.add("show");
+      sidePanel.classList.add("show");
+    });
+  }, 1200);
+
+  setTimeout(() => uiReady = true, 2000);
+}
+
 function loadDocs() {
   if (!uiReady) return;
-
   if (window.openDocs) return openDocs();
-
   const s = document.createElement("script");
   s.src = "/docs.js";
   s.onload = () => openDocs();
   document.body.appendChild(s);
 }
-
 function loadServices() {
   if (!uiReady) return;
-
   if (window.openServices) return openServices();
-
   const s = document.createElement("script");
   s.src = "/serv.js";
   s.onload = () => openServices();
