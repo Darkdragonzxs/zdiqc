@@ -8,27 +8,33 @@
       .docs-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,.75);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
         display: flex;
         justify-content: center;
         align-items: center;
         opacity: 0;
-        transition: opacity .3s ease;
+        transition: opacity 0.3s ease;
         z-index: 1000;
       }
-      .docs-overlay.show { opacity: 1; }
+      .docs-overlay.show {
+        opacity: 1;
+      }
 
       .docs-content {
         width: 80%;
+        max-width: 1000px;
         height: 80%;
-        background: #111;
-        border: 2px solid #fff;
-        border-radius: 8px;
-        transform: scale(.95);
+        background: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        transform: scale(0.95);
         opacity: 0;
-        transition: all .3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+        position: relative;
       }
       .docs-content.show {
         transform: scale(1);
@@ -36,14 +42,24 @@
       }
 
       .docs-close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-size: 28px;
         color: #fff;
-        font-size: 24px;
         cursor: pointer;
-        align-self: flex-end;
-        padding: 10px;
+        transition: color 0.2s ease;
+        z-index: 1;
+      }
+      .docs-close:hover {
+        color: #ff5f5f;
       }
 
-      iframe { flex: 1; border: none; }
+      .docs-content iframe {
+        flex: 1;
+        border: none;
+        border-radius: 0 0 12px 12px;
+      }
     `;
     document.head.appendChild(style);
   }
