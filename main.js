@@ -68,3 +68,13 @@ function loadScript(src) {
   s.src = src;
   document.body.appendChild(s);
 }
+
+function keepVideoPlaying(video) {
+  function step() {
+    if (!video.paused) {
+      video.currentTime += 0.016;
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
