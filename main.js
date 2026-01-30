@@ -42,23 +42,6 @@ function updateIcon() {
   sidePanel.classList.add("fade");
 })();
 
-(function createButtons() {
-  const c = main.querySelector(".center");
-  if (!c) return;
-  if (c.querySelector(".buttons")) return;
-  const b = document.createElement("div");
-  b.className = "buttons fade";
-  const d = document.createElement("button");
-  d.textContent = "documentation";
-  d.onclick = loadDocs;
-  const s = document.createElement("button");
-  s.textContent = "services";
-  s.onclick = loadServices;
-  b.appendChild(d);
-  b.appendChild(s);
-  c.appendChild(b);
-})();
-
 let uiReady = false;
 function startSequence() {
   const overlay = document.getElementById("overlay");
